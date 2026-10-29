@@ -48,7 +48,7 @@ print(data["label"].value_counts())
 X, y = data["text"], data["label"]
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=SET["test_size"],
-    stratify=y, random_state=CONFIG["seed"])
+    stratify=y, random_state=SET["seed"])
 train_df = pd.concat([X_train, y_train], axis=1).reset_index(drop=True)
 test_df  = pd.concat([X_test,  y_test],  axis=1).reset_index(drop=True)
 print(f"Train: {len(train_df)} | Test: {len(test_df)}")
@@ -61,7 +61,7 @@ raw = DatasetDict({
 })
 
 # SET THE TOKENIZER AND TOKENIZE THE TEXT
-tokenizer = AutoTokenizer.from_pretrained(CONFIG["model_name"])
+tokenizer = AutoTokenizer.from_pretrained(SET["model_name"])
 
 def preprocess(batch):
     return tokenizer(batch["text"], truncation=True,
@@ -100,7 +100,7 @@ id2label = {0: "Non Sexist", 1: "Sexist"}
 label2id = {"Non Sexist": 0, "Sexist": 1}
 
 model = AutoModelForSequenceClassification.from_pretrained(
-    CONFIG["model_name"], num_labels=2,
+    SET["model_name"], num_labels=2,
     id2label=id2label, label2id=label2id)
 
 args = TrainingArguments(
